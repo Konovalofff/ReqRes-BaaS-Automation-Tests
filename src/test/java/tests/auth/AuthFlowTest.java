@@ -54,26 +54,20 @@ public class AuthFlowTest extends BaseApiTest {
     @Description("Проверяет получение session token по verification token")
     @Severity(SeverityLevel.BLOCKER)
     void verifySession() {
-
-        String verificationToken = "test_verification_token_123";
+        String verificationToken = "384";
 
         Allure.step("Верифицируем токен и получаем session token", () -> {
-            var response = authApiClient.verifySession(verificationToken);
-
-            AuthResponse authResponse = response.then()
+            AuthResponse authResponse = authApiClient.verifySession(verificationToken)
+                    .then()
                     .spec(responseOk())
                     .extract()
                     .as(AuthResponse.class);
 
             assertNotNull(authResponse.getSessionToken());
-            assertNotNull(authResponse.getUserId());
-            // assertTrue(authResponse.isMagicLinkSent());
+            assertNotNull(authResponse.getAppUser());
+            assertNotNull(authResponse.getAppUser().getId());
 
             Allure.addAttachment("Session Token", authResponse.getSessionToken());
-            Allure.addAttachment("User ID", authResponse.getUserId());
-
-            // Сохраняем в менеджер сессий
-            sessionManager.saveSession("test@reqres.test", authResponse.getSessionToken());
         });
     }
 
@@ -109,7 +103,7 @@ public class AuthFlowTest extends BaseApiTest {
             assertNotNull(authResponse.getSessionToken());
 
             Allure.addAttachment("Session Token", authResponse.getSessionToken());
-            Allure.addAttachment("User ID", authResponse.getUserId());
+            //Allure.addAttachment("User ID", authResponse.getUserId());
 
             sessionManager.saveSession(testEmail, authResponse.getSessionToken());
         });

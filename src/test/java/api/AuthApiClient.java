@@ -4,6 +4,9 @@ import config.ApiConfig;
 import io.restassured.response.Response;
 import models.request.AuthRequest;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static io.restassured.RestAssured.given;
 
 public class AuthApiClient {
@@ -16,11 +19,15 @@ public class AuthApiClient {
     }
 
     public Response verifySession(String verificationToken) {
+        // Создаём тело запроса с токеном
+        Map<String, String> body = new HashMap<>();
+        body.put("token", verificationToken); // Предполагаем, что поле называется "token"
+
         return given()
-                .spec(ApiConfig.getPublicSpec())
-                .queryParam("token", verificationToken)
+                .spec(ApiConfig.getPublicSpec()) // Оставляем, но он добавит только baseURL и contentType
+                .body(body) // Добавляем тело запроса
                 .when()
-                .get("/auth/verify");
+                .post("/app-users/verify"); // Меняем метод на POST и путь
     }
 
     public Response refreshSession(String sessionToken) {

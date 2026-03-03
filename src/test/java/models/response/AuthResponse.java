@@ -5,15 +5,22 @@ import lombok.Data;
 
 @Data
 public class AuthResponse {
+    // Поля для ответа sendMagicLink
     private String id;
     private String email;
-
-    @JsonProperty("redirectUrl")
     private String redirectUrl;
-
-    @JsonProperty("createdAt")
     private String createdAt;
 
+    // Поля для ответа verifySession
+    @JsonProperty("session_token")
     private String sessionToken;
-    private String userId;
+
+    @JsonProperty("app_user")
+    private AppUser appUser; // Вложенный объект
+
+    @Data
+    public static class AppUser {
+        private String id;
+        private String email;
+    }
 }
