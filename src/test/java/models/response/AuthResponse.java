@@ -5,15 +5,15 @@ import lombok.Data;
 
 @Data
 public class AuthResponse {
-    @JsonProperty("magic_link_sent")
-    private boolean magicLinkSent;
+    private String id;
+    private String email;
 
-    @JsonProperty("session_token")
+    @JsonProperty("redirectUrl")
+    private String redirectUrl;
+
+    @JsonProperty("createdAt")
+    private String createdAt;
+
     private String sessionToken;
-
-    @JsonProperty("expires_at")
-    private String expiresAt;
-
-    @JsonProperty("user_id")
     private String userId;
 }
